@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <base target="_top">
+    <meta http-equiv="Content-Security-Policy" content="">
+    <meta charset="utf-8"/>
+    <meta name="description" content="ChatBot dedicado a contestar Google Forms dentro de una Google Sheets"/>
+    <meta name="author" content="pablojc12 by TG"/>
+    <meta name="copyright" content="TG"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Paquito Contesta</title>
+  </head>
+  <body ng-controller="ctrlMain">
+  
+    <!-- MESSAGES -->
+    <div class="container">
+      
+      <div id="messages"></div>
+      <div class="loader"></div>
+      
+      <!--div ng-repeat="(f, item) in form | limitTo:limitToRepeat">
+        <p><span class="bg-primary">{{item.title}}</span></p>
+    	<p ng-if="type(response[f].value)" class="text-right"><span class="bg-success">{{response[f].value}}</span></p>
+   	  </div-->
+      
+      <br><br>
+      <div id="scroll"></div>
+    </div>
+    
+    <div>
+      <footer>
+        <!-- DIALOG-FLOW -->
+        <div ng-if="!type(form[index].value)">
+          <form ng-submit="sendDialog()">
+            <div class="input-group">
+              <input type="text" ng-model="text.value" class="form-control" placeholder="Message" required>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-share-alt"></span>
+                </button>
+              </span>
+            </div>
+          </form>
+        </div>
+        
+    	<!-- MULTIPLE_CHOICE -->
+	    <div ng-if="(form[index].type == 'MULTIPLE_CHOICE')" class="table-responsive">
+          <table class="table table-condensed">
+            <tr>
+              <td class="form-inline text-center">
+                  <button ng-click="next(choice)" class="btn btn-default btn-space" ng-repeat="(c, choice) in form[index].value">{{choice}}</button>
+              </td>
+            </tr>
+          </table>
+    	</div>
+    
+	    <!-- TEXT & PARAGRAPH_TEXT -->
+    	<div ng-if="(form[index].type == 'TEXT' || form[index].type == 'PARAGRAPH_TEXT')">
+          <form ng-submit="next(text.value)">
+            <div class="input-group">
+              <input type="text" ng-model="text.value" class="form-control" placeholder="Message" ng-click="(scroll('#scroll'))" required>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">
+                  <span class="glyphicon glyphicon-share-alt"></span>
+                </button>
+              </span>
+            </div>          	
+          </form>
+    	</div>
+      
+    	<!-- SCALE -->
+	    <div ng-if="(form[index].type == 'SCALE')" class="">
+          <div class="scale" role="toolbar" aria-label="ScaleItem">
+            <div class="btn-group" role="group" aria-label="ScaleLabelLeft">
+              <button class="btn btn-default" disabled="disabled">{{form[index].value.left}}</button>&nbsp;
+            </div>
+            <div class="btn-group" role="group" aria-label="ScaleValue" ng-repeat="(n, num) in form[index].value.val">
+              <button ng-click="next(num)" class="btn btn-info" >{{num}}</button>&nbsp;
+            </div>
+            <div class="btn-group" role="group" aria-label="ScaleLabelRigth">
+              <button class="btn btn-default" disabled="disabled">{{form[index].value.rigth}}</button>
+            </div>
+          </div>
+	    </div>
+      </footer>
+    </div>
+    
+    <!-- Angular 1.7.2 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <!-- servicios de angular -->
+    <script src="js/appsscript.js"></script>
+    <script src="js/dialogflow.js"></script>
+    <script src="js/ctrl.js"></script>
+  </body>
+</html>
